@@ -97,6 +97,8 @@ class TeleCentro {
 			});
 		}	
 	
+		//Hasta aca el bloque de Manejo de operador
+
 
 
 	agregarTabla(Elemento){
@@ -122,6 +124,18 @@ class TeleCentro {
 		});
 	}
 
+	soloOperador(){
+ 		let operadores=[];
+ 		for(let elemento of this.listaLlamadas){
+ 			operadores.push(elemento.operador)
+ 		}
+ 		return operadores;
+}
+
+
+	//Hasta aca el bloque de Manejo de llamadas
+	
+	
 
 
 	consultaPromedio (){
@@ -135,41 +149,96 @@ class TeleCentro {
 				nroLlamada ++;
 			}
 		}
-		promedio = promedio / nroLlamada;
+		promedio = parseInt(promedio / nroLlamada);
 		return promedio;
 	}
+
+	motivosNoAtendio(){
+		let datos = this.darTodosLlamadas();
+		let elegido = document.getElementById("idCombo2").value;
+		let motivo;
+		let cumplen = [];
+		let numeros = [1,2,3,4,5,6];
+		
+
+		for (let elemento of datos){
+			if (elemento.operador == elegido){
+				motivo = elemento.motivo;
+				if(!cumplen.includes(elemento.motivo)){
+					cumplen.push(motivo);
+				}
+				
+			}
+		};
+		for(let i= 0; i<cumplen.length;i++){
+			for(let j = 0;j<numeros.length;j++){
+				if(cumplen[i] == numeros[j]){
+					numeros.splice(j,1);
+				}
+			}
+			/*if (numeros.includes(cumplen[i])){
+			numeros.splice(numeros.indexOf(parseInt(cumplen[i])));
+			alert('splice'+numeros.splice(cumplen[i],1));
+			}*/
+		}	
+		return numeros;
+	}
+
 
 
 	llamadaMasLarga(){
 		let datos = this.darTodosLlamadas();
-		let elegido = document.getElementById("idCombo2").value;
-		let maximo = 0;
-		let numero =0
-		for(let elemento of datos){
-			if(elemento.operador === elegido){
-				if(elemento.duracion > maximo){
-				maximo = elemento.duracion;
-				numero = elemento.numeroLlamada;
+			let elegido = document.getElementById("idCombo2").value;
+			let maximo = 0;
+			let numero = 0 ;
+			for(let elemento of datos){
+				if(elemento.operador === elegido){
+					if(parseInt(elemento.duracion) > maximo){
+					maximo = parseInt(elemento.duracion);
+					numero = elemento.numeroLlamada;
+					}
 				}
 			}
-		}
-		let resultado =  "Numero " + numero + " Duracion " + maximo; 
-		return resultado;
+			let resultado =  "Numero " + numero + " Duracion " + maximo; 
+			return resultado;
 	}
 
 	agregarListaDuracion(duraciones){
-		let datos = this.darTodosLlamadas();
+		let datos = this.ordenerPorNombreNumero();
+		let maximo = 1;
 		let cumplen = [];
 		for(let elemento of datos){
 			if(parseInt(elemento.duracion) == duraciones){
 				cumplen.push(elemento.operador);
 			}
-
 		}
-		return cumplen;
+		let retorno = [];
+		let anterior = cumplen[0];
+		
+		for(let i = 1 ; i <= cumplen.length ; i++){
+			let cantidad = 1;
+			if (cumplen[i] == anterior){
+				cantidad ++ ;
+			}
+		
+			if (cantidad > maximo){
+				retorno = [anterior];
+				maximo = cantidad;
+				
+			}
+			else{
+				if(cantidad == maximo){
+					retorno.push(anterior);
+					
+				}
+			}
+			anterior = cumplen[i]
+		}
+		return retorno;
+
 	}
 
-	palabrasCoinciden(palabras){	//devuelve lista de llamadas que cumplen
+	palabrasCoinciden(palabras){	 //devuelve lista de llamadas que cumplen
 		let datos = this.darTodosLlamadas();
 		let cumplen = [];
 		let frase = this.pasarArray(palabras);

@@ -13,6 +13,7 @@ function inicio(){
 	document.getElementById("idConsultarHistoria").addEventListener("click",consultaPorHistoria);
 	document.getElementById("idConsultarLlamadas").addEventListener("click",consultaPorLlamada);
 	document.getElementById("idBotonPalabras").addEventListener("click", consultaPalabras);
+	document.getElementById("idDistribucion").addEventListener("click",PieChart);
 	
 
 } 
@@ -126,34 +127,10 @@ function cargarTabla(){											//Primero los ordena dependiendo cual boton es
 		let celda4 = fila.insertCell();
 		let img = document.createElement("img");
 		let numero = parseInt(datos[i].motivo);
-		//telecentro.darImagenes(numero);
-		switch(numero){
-			case 1:
-				img.src = "img/Numero1.png"
-				img.alt = "imagen motivo 1"
-			break
-			case 2:
-				img.src = "img/Numero2.png"
-				img.alt = "imagen motivo 2"
-			break
-			case 3:
-				img.src = "img/Numero3.png"
-				img.alt = "imagen motivo 3"
-			break
-			case 4:
-				img.src = "img/Numero4.png"
-				img.alt = "imagen motivo 4"
-			break
-			case 5:
-				img.src = "img/Numero5.png"
-				img.alt = "imagen motivo 5"
-			break
-			case 6:
-				img.src = "img/Numero6.png"
-				img.alt = "imagen motivo 6"
-			break
-
-		}
+		img.src = "img/Numero"+numero+".png"
+			img.alt = "imagen motivo "+numero;
+			img.width = 30;
+			img.height = 30;
 		celda4.appendChild(img); 	
 		let celda5 = fila.insertCell();
 		celda5.textContent = datos[i].duracion;
@@ -164,8 +141,15 @@ function cargarTabla(){											//Primero los ordena dependiendo cual boton es
 
 
 function consultaPorHistoria(){
-	document.getElementById("idPromedio").innerHTML += " " +telecentro.consultaPromedio();
-	document.getElementById("idLlamadaMasLarga").innerHTML += " " + telecentro.llamadaMasLarga();
+	if(telecentro.darTodosLlamadas().length == 0){
+		alert("No hay llamadas");
+	}
+	else{
+		document.getElementById("idPromedio").innerHTML = "Tiempo promedio de atencion:" +" " +telecentro.consultaPromedio();
+		document.getElementById("idLlamadaMasLarga").innerHTML =  "Llamada mas larga:" + " " + telecentro.llamadaMasLarga();
+		//document.getElementById("Motivo").innerHTML = "Motivo no atendió:" + " " +
+	 	imagenesDeMotivos();
+	}
 }
 
 
@@ -200,32 +184,10 @@ function consultaPalabras(){
 		let celda4 = fila.insertCell();
 		let img = document.createElement("img");
 		let numero = parseInt(llamadas[i].motivo);
-		switch(numero){
-			case 1:
-				img.src = "img/Numero1.png"
-				img.alt = "imagen motivo 1"
-			break
-			case 2:
-				img.src = "img/Numero2.png"
-				img.alt = "imagen motivo 2"
-			break
-			case 3:
-				img.src = "img/Numero3.png"
-				img.alt = "imagen motivo 3"
-			break
-			case 4:
-				img.src = "img/Numero4.png"
-				img.alt = "imagen motivo 4"
-			break
-			case 5:
-				img.src = "img/Numero5.png"
-				img.alt = "imagen motivo 5"
-			break
-			case 6:
-				img.src = "img/Numero6.png"
-				img.alt = "imagen motivo 6"
-			break
-		}
+		img.src = "img/Numero"+numero+".png"
+			img.alt = "imagen motivo "+numero;
+			img.width = 30;
+			img.height = 30;
 		celda4.appendChild(img); 
 		let celda5 = fila.insertCell();
 		celda5.textContent = llamadas[i].duracion;
@@ -235,6 +197,73 @@ function consultaPalabras(){
 }
 
 
+function imagenesDeMotivos (){
+	let motivos = telecentro.motivosNoAtendio();
+	let parrafo = document.getElementById("idMotivosNoAtendio");
+	parrafo.innerHTML = "";
+	let fotos = [];
+	
+	for (let i = 1 ; i <= 6; i++){
+
+		if(motivos.includes(i)){
+		let img = document.createElement("img");
+		img.src = "img/Numero" + i +".png"
+		img.alt = "imagen motivo "+ i;
+		img.width = 30;
+		img.height = 30;
+		parrafo.appendChild(img);
+
+		}
+	}
+	return "Motivo no atendió:" + " " +parrafo;
+}
 
 
 
+function PieChart(){
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+
+	function drawChart() {
+		if(telecentro.darTodosLlamadas().length == 0){
+			alert("No hay llamadas")
+		}
+		else{
+			let datos = telecentro.soloOperador(); //array de todas las llamadas solo con los operadores
+			let cantidad = 1;
+			let arrDatos=[];
+			for(let i=0;i < datos.length;i++){
+				if(arrDatos.includes(datos[i])==false){ //para evitar que em agregue un operador varias veces en el array
+					for (let j=1 ;j< datos.length; j++){
+						if(datos[i] == datos[j]){ //si los operadores coinciden, contador++
+							cantidad++
+						}
+					
+					}
+					arrDatos.push(datos[i]); 
+					arrDatos.push(cantidad);//crea el array de forma [operador,numero]
+					cantidad = 0;
+				}	
+			}
+			let data =new google.visualization.DataTable();
+			data.addColumn("string","operadores"); 
+			data.addColumn("number","numero de llamadas"); //agrega ambas columnas la primera con type string y la segunda con type number
+			data.addRows(arrDatos.length);
+			for(let i= 0;i<arrDatos.length-1;i=i+2){
+				data.setCell(i,0,arrDatos[i]);//
+				data.setCell(i,1,arrDatos[i+1]);//parseInt(arrDatos[i+1])	
+			}
+			var options = {
+				title: '% distribucion de llamadas',
+				animation: {
+					duration: 1000,
+					easing: 'in',
+					startup: true
+				}
+			};
+			var chart = new google.visualization.PieChart(document.getElementById('idChart'));
+			chart.draw(data, options);
+		}
+	}
+}

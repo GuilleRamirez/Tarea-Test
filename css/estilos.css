@@ -5,6 +5,44 @@
 		margin-left: 5%;
 		border-width: 0%;
 	}
+	#linea p{display: inline}
+
+
+	nav ul li {display: inline;
+		}
+
+
+	table,th,td{
+		border-collapse: collapse;
+		border:solid;
+		border-width:1px;
+		text-align: center;
+		padding: 10px;
+	}
+
+	nav {background-color : #EFF093;}
+
+
+	footer {
+		padding-left: 5%;
+		background-color: darkgrey;
+		text-align: right;
+	}
+
+
+
+	#idTeleCentroimagen {width: 100%;
+		height: 100px;
+		clear :both;}
+	}
+@media only screen and (min-width: 481px) {  		/*mas de 481 cambia de color el fondo*/
+	#BloqueCompleto {background-color: #E3F9FE;
+		padding-left: 6%;
+		margin-left: 5%;
+		border-width: 0%;
+	}
+
+	#linea p{display: inline}
 
 
 	nav ul li {display: inline;
@@ -33,48 +71,5 @@
 	#idTeleCentroimagen {width: 100%;
 		height: 100px;
 	clear :both;}
-}
-@media only screen and (min-width: 481px) {  		/*mas de 481 cambia de color el fondo*/
-	#BloqueCompleto {background-color: #E3F9FE;
-		padding-left: 6%;
-		margin-left: 5%;
-		border-width: 0%;
-	}
-
-
-	nav ul li {display: inline;
-		}
-
-
-	table,th,td{
-		border-collapse: collapse;
-		border:solid;
-		border-width:1px;
-		text-align: center;
-		padding: 10px;
-	}
-
-	nav {background-color : #EFF093;}
-
-
-	footer {
-		padding-left: 5%;
-		background-color: darkgrey;
-		text-align: right;
-	}
-
-
-
-	#idTeleCentroimagen {width: 100%;
-		height: 100px;
-		clear :both;
-	}
-
-	html, body, #container {
-  	width: 100%;
-	height: 100%;
-  	margin: 0;
- 	padding: 0;
-}
 }
 

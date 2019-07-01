@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href = "css/estilos.css">
 	<script src="js/clases.js"> </script>
 	<script src="js/funciones.js"> </script>
+	<script  src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
 
@@ -31,8 +32,8 @@
 	<article id="BloqueOperadores"> <!-- Separa en bloques las secciones para ocultarlos a gusto-->
 	<h1>
 		<u>Manejo de Operadores</u>
-		<a id="Operadores"></a>
 	</h1>
+	<a id="Operadores"></a>
 	<br>
 
 	<h2>Registro de operadores</h2>
@@ -71,8 +72,8 @@
 
 	<form id="idformRegistroLlamadas">
 		<label for="idCombo">Operador:</label>
-		<select name="nombres" id="idCombo" required> <!-- boton con diferentes opciones-->
-			
+		<select id="idCombo" required> <!-- boton con diferentes opciones-->
+		<option value="">Operador</option> 
 		</select >
 
 		<label for="idDescripciónRegistro">Descripción:</label>
@@ -80,7 +81,7 @@
 		<label for= "idMotivoRegistro">Motivo:</label>
 		<input type="number" id="idMotivoRegistro" placeholder="1" max="6" min="1" required="">
 		<label for="idDuracionRegistro">Duración</label>
-		<input type="number" id="idDuracionRegistro" placeholder="1" min="1" max="60" pattern="[1-6][0-9]" required=""  >
+		<input type="number" id="idDuracionRegistro" placeholder="1" min="1" max="60" required=""  >
 		<label for="idCelularRegistro">Celular</label>
 		<input type="tel" id="idCelularRegistro" placeholder="celular" pattern="09[1-9][0-9]{6}" required="">
 		<button id="buttonRegistro" type="submit">Agregar</button>
@@ -98,12 +99,14 @@
 		<!-- Tabla de manejo de llamadas-->
 		<table >
 			<thead>
-				<th>NUMERO</th>
-				<th>OPERADOR</th>
-				<th>DESCRIPCION</th>
-				<th>MOTIVO</th>
-				<th>DURACION</th>
-				<th>CELULAR</th>
+				<tr>
+					<th>NUMERO</th>
+					<th>OPERADOR</th>
+					<th>DESCRIPCION</th>
+					<th>MOTIVO</th>
+					<th>DURACION</th>
+					<th>CELULAR</th>
+				</tr>
 			</thead>
 			<tbody id="idTablaLlamadas">
 				
@@ -129,14 +132,17 @@
 	
 
 		<label for="idCombo">Operador:</label>
-		<select name="nombres" id="idCombo2" required> <!-- boton con diferentes opciones-->
-			
-		</select >
+		<select id="idCombo2" required> <!-- boton con diferentes opciones-->
+		<option value="">Operador</option>
+		</select>
 		<button type="submit" id="idConsultarHistoria">Consultar historia</button>
 		<br />
 		<br>
-
-		<p id="idMotivosNoAtendio">Motivos no atendio: </p>
+		<div class= "linea">
+			<p>Motivos no atendidos:</p>
+			<p id="idMotivosNoAtendio"> </p>
+		</div>
+		<p id="Motivo"></p>
 		<p id="idLlamadaMasLarga">Llamada mas larga:</p>
 		<p id="idPromedio">Tiempo promedio de atencion:</p>
 		<br />
@@ -176,8 +182,9 @@
 	</table>
 	<br>
 
-	<button type="button">Distribucion de llamadas</button>
+	<button type="button" id="idDistribucion">Distribucion de llamadas</button>
 	<br>
+	<div id="idChart"></div>
 </article>
 </section>
 <a href=#tope>Ir al tope</a>
